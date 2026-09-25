@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><PackageId>AngryMonkey.CloudCommon.Theming</PackageId><Description>Complete theme resolution and portable CSS export.</Description></PropertyGroup>
+  <ItemGroup><EmbeddedResource Include="wwwroot/css/elements.css" LogicalName="CloudCommon.Elements.css" /></ItemGroup>
+  <ItemGroup><None Include="src/css/*.less" Pack="true" PackagePath="contentFiles/any/any/theming/" /></ItemGroup>
+</Project>

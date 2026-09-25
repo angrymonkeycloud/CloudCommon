@@ -1,0 +1,70 @@
+// CloudCommon visual recipes. Layout belongs to each consuming component.
+@import (reference) "defaults.less";
+.amc-state(@library; @element; @state) {
+  @background-key: ~"@{element}-@{state}-background";
+  @background-fallback: @@background-key;
+  background: ~"var(--@{library}-@{element}-@{state}-background, var(--amc-@{element}-@{state}-background, @{background-fallback}))";
+  @color-key: ~"@{element}-@{state}-color";
+  @color-fallback: @@color-key;
+  color: ~"var(--@{library}-@{element}-@{state}-color, var(--amc-@{element}-@{state}-color, @{color-fallback}))";
+  @border-color-key: ~"@{element}-@{state}-border-color";
+  @border-color-fallback: @@border-color-key;
+  border-color: ~"var(--@{library}-@{element}-@{state}-border-color, var(--amc-@{element}-@{state}-border-color, @{border-color-fallback}))";
+  @border-width-key: ~"@{element}-@{state}-border-width";
+  @border-width-fallback: @@border-width-key;
+  border-width: ~"var(--@{library}-@{element}-@{state}-border-width, var(--amc-@{element}-@{state}-border-width, @{border-width-fallback}))";
+  @border-style-key: ~"@{element}-@{state}-border-style";
+  @border-style-fallback: @@border-style-key;
+  border-style: ~"var(--@{library}-@{element}-@{state}-border-style, var(--amc-@{element}-@{state}-border-style, @{border-style-fallback}))";
+  @border-radius-key: ~"@{element}-@{state}-border-radius";
+  @border-radius-fallback: @@border-radius-key;
+  border-radius: ~"var(--@{library}-@{element}-@{state}-border-radius, var(--amc-@{element}-@{state}-border-radius, @{border-radius-fallback}))";
+  @box-shadow-key: ~"@{element}-@{state}-box-shadow";
+  @box-shadow-fallback: @@box-shadow-key;
+  box-shadow: ~"var(--@{library}-@{element}-@{state}-box-shadow, var(--amc-@{element}-@{state}-box-shadow, @{box-shadow-fallback}))";
+  @font-family-key: ~"@{element}-@{state}-font-family";
+  @font-family-fallback: @@font-family-key;
+  font-family: ~"var(--@{library}-@{element}-@{state}-font-family, var(--amc-@{element}-@{state}-font-family, @{font-family-fallback}))";
+  @font-size-key: ~"@{element}-@{state}-font-size";
+  @font-size-fallback: @@font-size-key;
+  font-size: ~"var(--@{library}-@{element}-@{state}-font-size, var(--amc-@{element}-@{state}-font-size, @{font-size-fallback}))";
+  @font-weight-key: ~"@{element}-@{state}-font-weight";
+  @font-weight-fallback: @@font-weight-key;
+  font-weight: ~"var(--@{library}-@{element}-@{state}-font-weight, var(--amc-@{element}-@{state}-font-weight, @{font-weight-fallback}))";
+  @line-height-key: ~"@{element}-@{state}-line-height";
+  @line-height-fallback: @@line-height-key;
+  line-height: ~"var(--@{library}-@{element}-@{state}-line-height, var(--amc-@{element}-@{state}-line-height, @{line-height-fallback}))";
+  @letter-spacing-key: ~"@{element}-@{state}-letter-spacing";
+  @letter-spacing-fallback: @@letter-spacing-key;
+  letter-spacing: ~"var(--@{library}-@{element}-@{state}-letter-spacing, var(--amc-@{element}-@{state}-letter-spacing, @{letter-spacing-fallback}))";
+  @text-decoration-key: ~"@{element}-@{state}-text-decoration";
+  @text-decoration-fallback: @@text-decoration-key;
+  text-decoration: ~"var(--@{library}-@{element}-@{state}-text-decoration, var(--amc-@{element}-@{state}-text-decoration, @{text-decoration-fallback}))";
+  @opacity-key: ~"@{element}-@{state}-opacity";
+  @opacity-fallback: @@opacity-key;
+  opacity: ~"var(--@{library}-@{element}-@{state}-opacity, var(--amc-@{element}-@{state}-opacity, @{opacity-fallback}))";
+  @outline-key: ~"@{element}-@{state}-outline";
+  @outline-fallback: @@outline-key;
+  outline: ~"var(--@{library}-@{element}-@{state}-outline, var(--amc-@{element}-@{state}-outline, @{outline-fallback}))";
+  @outline-offset-key: ~"@{element}-@{state}-outline-offset";
+  @outline-offset-fallback: @@outline-offset-key;
+  outline-offset: ~"var(--@{library}-@{element}-@{state}-outline-offset, var(--amc-@{element}-@{state}-outline-offset, @{outline-offset-fallback}))";
+  @transition-key: ~"@{element}-@{state}-transition";
+  @transition-fallback: @@transition-key;
+  transition: ~"var(--@{library}-@{element}-@{state}-transition, var(--amc-@{element}-@{state}-transition, @{transition-fallback}))";
+  @filter-key: ~"@{element}-@{state}-filter";
+  @filter-fallback: @@filter-key;
+  filter: ~"var(--@{library}-@{element}-@{state}-filter, var(--amc-@{element}-@{state}-filter, @{filter-fallback}))";
+  @animation-key: ~"@{element}-@{state}-animation";
+  @animation-fallback: @@animation-key;
+  animation: ~"var(--@{library}-@{element}-@{state}-animation, var(--amc-@{element}-@{state}-animation, @{animation-fallback}))";
+}
+.amc-control(@library; @element) {
+  .amc-state(@library; @element; normal);
+  &:where(:hover:not(:disabled):not([aria-disabled="true"])) { .amc-state(@library; @element; hover); }
+  &:active:not(:disabled) { .amc-state(@library; @element; active); }
+  &[aria-pressed="true"], &[aria-selected="true"], &._selected { .amc-state(@library; @element; selected); }
+  &[aria-invalid="true"], &:user-invalid { .amc-state(@library; @element; invalid); }
+  &:disabled, &[aria-disabled="true"], &._disabled { .amc-state(@library; @element; disabled); }
+  &:focus-visible { .amc-state(@library; @element; focus); }
+}

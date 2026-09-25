@@ -1,0 +1,10 @@
+<Solution>
+  <Project Path="CloudCommon.Demo/CloudCommon.Demo.csproj" DefaultStartup="true" />
+  <Project Path="CloudCommon.Models/CloudCommon.Models.csproj" />
+  <Project Path="CloudCommon.Theming/CloudCommon.Theming.csproj" />
+  <Project Path="CloudCommon.Theming.Blazor/CloudCommon.Theming.Blazor.csproj" />
+  <Project Path="CloudCommon.Geography/CloudCommon.Geography.csproj" />
+  <Project Path="CloudCommon.Tests/CloudCommon.Tests.csproj" />
+  <Project Path="CloudCommon.AssetBuilder/CloudCommon.AssetBuilder.csproj" />
+</Solution>
+

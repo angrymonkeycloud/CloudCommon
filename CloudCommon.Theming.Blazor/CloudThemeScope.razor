@@ -1,0 +1,27 @@
+@namespace AngryMonkey.CloudCommon.Theming.Blazor
+@using AngryMonkey.CloudCommon.Theming
+@using Microsoft.AspNetCore.Components
+
+<style nonce="@Nonce">@((MarkupString)_css)</style>
+<CascadingValue Value="_resolved" IsFixed="false">
+    <div class="@($"{_scope} cloud-theme {Class}")" data-amc-theme="@Mode.ToString().ToLowerInvariant()">
+        @ChildContent
+    </div>
+</CascadingValue>
+
+@code {
+    [Parameter] public ThemeDefinition? Theme { get; set; }
+    [Parameter] public ThemeModes Mode { get; set; }
+    [Parameter] public string? Class { get; set; }
+    [Parameter] public string? Nonce { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    private readonly string _scope = $"cloud-scope-{Guid.NewGuid():N}";
+    private string _css = "";
+    private ResolvedTheme _resolved = ThemeResolver.Resolve();
+    protected override void OnParametersSet()
+    {
+        _resolved = ThemeResolver.Resolve(Theme, Mode);
+        _css = ThemeCss.Export(Theme, Mode, _scope);
+    }
+}
+

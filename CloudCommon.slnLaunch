@@ -1,0 +1,11 @@
+[
+  {
+    "Name": "CloudCommon Demo",
+    "Projects": [
+      {
+        "Path": "CloudCommon.Demo\\CloudCommon.Demo.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

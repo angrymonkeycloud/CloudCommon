@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup><IsPackable>false</IsPackable><RootNamespace>AngryMonkey.CloudCommon.Demo</RootNamespace></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../CloudCommon.Models/CloudCommon.Models.csproj" />
+    <ProjectReference Include="../CloudCommon.Theming.Blazor/CloudCommon.Theming.Blazor.csproj" />
+    <ProjectReference Include="../../CloudComponents/CloudComponents.DataGrid/CloudComponents.DataGrid.csproj" />
+    <ProjectReference Include="../../CloudLogin/CloudLogin.Components/CloudLogin.Components.csproj" />
+    <ProjectReference Include="../../CloudLogin/CloudLogin.Client/CloudLogin.Client.csproj" />
+    <ProjectReference Include="../../CloudCommerce/CloudCommerce.Components/CloudCommerce.Components.csproj" />
+    <ProjectReference Include="../../../CDM/CDM.Components/CDM.Components.csproj" />
+  </ItemGroup>
+</Project>
+

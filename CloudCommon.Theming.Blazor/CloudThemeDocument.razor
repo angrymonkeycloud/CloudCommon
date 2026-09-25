@@ -1,0 +1,12 @@
+@namespace AngryMonkey.CloudCommon.Theming.Blazor
+@using AngryMonkey.CloudCommon.Theming
+@using Microsoft.AspNetCore.Components
+
+<style nonce="@Nonce">@((MarkupString)_css)</style>
+
+@code {
+    [Parameter] public ThemeDefinition? Theme { get; set; }
+    [Parameter] public string? Nonce { get; set; }
+    private string _css = "";
+    protected override void OnParametersSet() => _css = ThemeCss.ExportDocument(Theme);
+}

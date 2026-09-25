@@ -1,0 +1,18 @@
+{
+  "name": "cloudcommon-workshop",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "build:assets": "node src/js/build-assets.mjs",
+    "test:browser": "node tests/browser/workshop.mjs",
+    "build:contract": "node src/js/build-theme-contract.mjs",
+    "build:related": "npm run build:assets && npm run build:contract && node src/js/build-related-assets.mjs",
+    "test:libraries": "node tests/browser/libraries.mjs",
+    "test:styles": "node tests/styles/local-theme-contract.mjs",
+    "test:appearance": "node tests/browser/appearance.mjs"
+  },
+  "devDependencies": {
+    "less": "4.9.1",
+    "playwright": "1.63.0"
+  }
+}

@@ -1,0 +1,236 @@
+@page "/"
+@using System.Text
+@using System.Text.Json
+
+<div class="workshop">
+    <aside class="workshop-sidebar">
+        <a class="workshop-brand" href="/">C<span>CloudCommon<small>DEVELOPER WORKSHOP</small></span></a>
+        <p class="workshop-caption">FOUNDATIONS</p>
+        @foreach (string page in Pages)
+        {
+            <button class="@(_page == page ? "_active" : "")" @onclick="() => SelectPage(page)">@(page)</button>
+        }
+        <div class="workshop-sidebar-note"><strong>One definition.<br />Every interface.</strong><p>Portable models and a visual language for your whole application.</p><span>LOCAL PREVIEW · v0.1</span></div>
+    </aside>
+    <main class="workshop-main">
+        <header class="workshop-topbar"><span>Angry Monkey Cloud / <strong>CloudCommon</strong></span><a href="https://github.com/angrymonkeycloud/CloudDocs">Documentation ↗</a></header>
+        <div class="workshop-heading"><span class="workshop-eyebrow">BUILD WITH CONSISTENCY</span><h1>@Title</h1><p>@Description</p></div>
+        <div class="workshop-toolbar">
+            <div class="workshop-tabs" role="tablist" aria-label="Workshop example">
+                @foreach (string tab in Tabs)
+                {
+                    <button role="tab" id="@($"tab-{tab}")" aria-selected="@(_tab == tab)" aria-controls="workshop-panel" @onclick="() => _tab = tab">@tab</button>
+                }
+            </div>
+            <span class="workshop-status">@_resolved.Tokens.Count resolved tokens · @_mode mode</span>
+        </div>
+        <section id="workshop-panel" role="tabpanel" aria-labelledby="@($"tab-{_tab}")">
+        @if (_tab == "Code")
+        {
+            <div class="workshop-document"><h2>Use this configuration</h2><p>This example follows your current controls. Download the portable CSS to use it in any web stack.</p>
+                <pre tabindex="0"><code>@ExampleCode</code></pre>
+                <h3>Export resolved CSS</h3><a class="workshop-action" download="cloud-theme.css" href="@CssDownload">Download theme.css</a>
+                <details><summary>Inspect all resolved CSS</summary><pre tabindex="0"><code>@ExportCss</code></pre></details>
+            </div>
+        }
+        else if (_tab == "Instructions")
+        {
+            <div class="workshop-document"><h2>Integrate the shared foundation</h2>
+                <ol><li>Reference CloudCommon.Theming.Blazor in a Blazor UI, or export a stylesheet for another framework.</li>
+                <li>Wrap your interface in CloudThemeScope. Configure the primary color, optional design values, and element overrides once.</li>
+                <li>Use data-cloud-element targets or cloud-* classes for shared elements. Keep layout, padding, and sizing in your application's LESS.</li>
+                <li>Use --amc-* semantic variables in custom components. Use the full library prefix for local overrides, such as --cloudcommerce-secondary-button-normal-background.</li>
+                <li>Check light and dark modes, keyboard focus, hover, disabled states, and your custom colors before shipping.</li></ol>
+                <h3>How overrides work</h3><p>Grayscale defaults → generated shades → shared design values → element settings → element CSS. Properties merge independently. Hover and active colors stay explicit; overriding one background does not regenerate the palette.</p>
+                <h3>Integration boundaries</h3><p>The examples use real MainInput, CouponInput, OptionButtons and DataGrid components. For a full document, render CloudThemeDocument in the head and set data-amc-theme to light, dark or system. Login redirects must load the same theme in their separate document.</p>
+                <h3>Shared models</h3><p>Money preserves up to nine decimal places and rejects mixed-currency arithmetic. PostalAddress stores geographic codes without a database dependency. GeoCoordinate validates latitude and longitude. DateTimeRange uses a half-open interval, so adjacent bookings do not overlap.</p>
+                <p>Country, currency and phone metadata remain in CloudGeography. Authentication, payments, shipping and navigation contracts remain with their existing owners.</p>
+            </div>
+        }
+        else if (_page == "Shared models")
+        {
+            <div class="workshop-document"><span class="workshop-eyebrow">SMALL CONTRACTS, CLEAR OWNERSHIP</span><h2>Shared models</h2>
+                <div class="model-grid"><section><h3>Money</h3><label>Amount<input type="number" step=".01" @bind="_amount" /></label><label>Currency<select @bind="_currency"><option>USD</option><option>EUR</option><option>LBP</option></select></label><output>@(ModelMoney?.Format() ?? "Use a valid amount with at most nine decimal places.")</output><pre>@JsonSerializer.Serialize(ModelMoney, JsonOptions)</pre></section>
+                <section><h3>PostalAddress + GeoCoordinate</h3><label>Address line<input @bind="_addressLine" /></label><p>@DemoAddress</p><pre>@JsonSerializer.Serialize(DemoAddress, JsonOptions)</pre></section></div>
+                <h3>Model inventory</h3><p>Reviewed all 12 public organization repositories plus local CDM. Promoted: Money, PostalAddress, GeoCoordinate and DateTimeRange. Kept with their owners: geographic reference data, verified contact identities, payment/shipping statuses, grid query contracts, localization configuration and navigation services.</p>
+            </div>
+        }
+        else
+        {
+            <div class="workshop-preview">
+            <CloudThemeScope Theme="_theme" Mode="_mode" Class="preview-scope">
+                @if (_page == "Palette & tokens")
+                {
+                    <div class="preview-intro"><span class="preview-kicker">THE COMPLETE SCALE</span><h2>Every shade has a purpose.</h2><p>Six palettes, semantic colors, and every element state resolve together.</p></div>
+                    @foreach (string palette in new[] { "primary", "secondary", "neutral", "success", "warning", "danger" })
+                    {
+                        <h3 class="palette-title">@palette</h3><div class="palette">
+                        @foreach (int shade in ThemeResolver.Shades)
+                        {
+                            string color = _resolved.Tokens[$"{palette}-{shade}"];
+                            <div class="palette-swatch" style="@($"background:{color};color:{ThemeColor.Parse(color).Foreground}")"><strong>@shade</strong><small>@color</small></div>
+                        }
+                        </div>
+                    }
+                    <h3>Semantic tokens</h3><div class="token-grid">@foreach ((string key, string value) in _resolved.Tokens.Where(pair => pair.Key.StartsWith("color-"))) { <div><i style="@($"background:{value}")"></i><code>@key</code><span>@value</span></div> }</div>
+                }
+                else if (_page == "Scope isolation")
+                {
+                    <div class="preview-intro"><span class="preview-kicker">LOCAL BY DESIGN</span><h2>Two themes. One page.</h2><p>The inner scope retains its own defaults when the outer theme changes.</p></div>
+                    <div class="scope-comparison"><section data-cloud-element="card"><h3>Host theme</h3><p>Controlled by the workshop settings.</p><button data-cloud-element="button">Host action</button></section>
+                    <CloudThemeScope Theme="_independent" Mode="ThemeModes.Dark" Class="nested-preview"><section data-cloud-element="card"><h3>Independent theme</h3><p>Always teal, always dark.</p><button data-cloud-element="button">Independent action</button></section></CloudThemeScope></div>
+                }
+                else
+                {
+                    <div class="preview-intro"><span class="preview-kicker">YOUR DESIGN, EVERYWHERE</span><h2>A common language.<br />A consistent experience.</h2><p>Change one theme. Explore its palette, elements, and library components together.</p><div class="preview-actions"><button data-cloud-element="button" @onclick="PrimaryAction">Try primary action</button><button data-cloud-element="secondary-button" @onclick="SecondaryAction">Secondary action</button><a href="#element-states" data-cloud-element="link">Explore states ↗</a></div><p role="status">@_notice</p></div>
+                    <LiveLibraries />
+                    <section class="grid-example" data-cloud-element="card"><span class="preview-kicker">CLOUDCOMPONENTS · LIVE COMPONENT</span><h3>One foundation, connected projects</h3><GridExample /></section>
+                    <section id="element-states" class="element-states"><h3>Element states</h3><div class="state-row"><button data-cloud-element="button">Normal / hover / focus</button><button data-cloud-element="button" disabled>Disabled</button><button data-cloud-element="button" aria-pressed="true">Selected</button><button data-cloud-element="danger-button">Destructive</button><input data-cloud-element="input" aria-label="Invalid input example" aria-invalid="true" value="Invalid value" /></div></section>
+                }
+            </CloudThemeScope>
+            </div>
+        }
+        </section>
+    </main>
+    <aside class="workshop-config" aria-label="Theme configuration">
+        <span class="workshop-eyebrow">MAKE IT YOURS</span><h2>Theme studio</h2><p>Changes apply instantly to this session.</p>
+        <label>Preset<select aria-label="Preset" value="@_preset" @onchange="PresetChanged"><option>Grayscale</option><option>Violet</option><option>Ocean</option><option>Amber</option></select></label>
+        <label>Primary color<div class="color-input"><input aria-label="Primary color picker" type="color" value="@_primary" @onchange="ColorChanged" /><code>@_primary</code></div></label>
+        <label>Appearance<select aria-label="Appearance" value="@_mode" @onchange="ModeChanged"><option>Light</option><option>Dark</option></select></label>
+        <label>Control radius<select aria-label="Control radius" value="@_radius" @onchange="RadiusChanged"><option value="0">Square</option><option value=".5rem">Soft</option><option value="1rem">Rounded</option><option value="999px">Pill</option></select></label>
+        <label>Typography<select aria-label="Typography" value="@_font" @onchange="FontChanged"><option value="Inter, 'Segoe UI', system-ui, sans-serif">System sans</option><option value="Georgia, serif">Editorial serif</option><option value="monospace">Monospace</option></select></label>
+        <label class="check-label"><input type="checkbox" checked="@_statusColors" @onchange="StatusChanged" /> Semantic status colors</label>
+        <label class="check-label"><input type="checkbox" checked="@_animate" @onchange="AnimationChanged" /> Animate primary buttons</label>
+        <div class="config-divider"></div>
+        <label>Button CSS override<textarea rows="4" @bind="_css" placeholder="background: #222222; color: #ffffff;"></textarea></label>
+        <button class="workshop-action" @onclick="Apply">Apply override</button>
+        @if (_error is not null) { <p class="config-error" role="alert">@_error</p> }
+        <p class="config-hint">Visual declarations only. Missing properties keep their theme values.</p>
+        <button class="workshop-reset" @onclick="Reset">Reset to grayscale</button>
+        <a class="workshop-download" download="cloud-theme.css" href="@CssDownload">Export CSS ↗</a>
+    </aside>
+</div>
+
+@code {
+    private static readonly string[] Pages = ["Theme playground", "Palette & tokens", "Scope isolation", "Shared models"];
+    private static readonly string[] Tabs = ["View", "Code", "Instructions"];
+    private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
+    private string _page = Pages[0], _tab = "View", _preset = "Grayscale", _primary = "#525252", _radius = ".5rem", _font = "Inter, 'Segoe UI', system-ui, sans-serif", _css = "";
+    private ThemeModes _mode;
+    private bool _statusColors, _animate;
+    private string? _error, _notice;
+    private ThemeDefinition _theme = CloudThemes.Grayscale();
+    private ResolvedTheme _resolved = ThemeResolver.Resolve();
+    private readonly ThemeDefinition _independent = CloudThemes.Color("#008577");
+    private decimal _amount = 49.95m;
+    private string _currency = "USD", _addressLine = "12 Garden Street";
+    private Money? ModelMoney
+    {
+        get
+        {
+            try { return new(_currency, _amount); }
+            catch (ArgumentException) { return null; }
+        }
+    }
+    private PostalAddress DemoAddress => new() { CountryCode = "LB", Locality = "Beirut", Line1 = _addressLine, Location = new(33.8938, 35.5018) };
+    private string Title => _page switch { "Palette & tokens" => "A palette with purpose.", "Scope isolation" => "Independent by default.", "Shared models" => "Shared meaning. Fewer copies.", _ => "Design once. Belong everywhere." };
+    private string Description => "Explore shared foundations, inspect working code, and bring the same visual language to any project.";
+    private string ExportCss => ThemeCss.Export(_theme, _mode);
+    private string CssDownload => "data:text/css;base64," + Convert.ToBase64String(Encoding.UTF8.GetBytes(ExportCss));
+    private string ExampleCode => _page == "Shared models" ? ModelExample : ThemeExample;
+    private const string ModelExample = """
+        using AngryMonkey.CloudCommon.Models;
+        using AngryMonkey.CloudCommon.Geography;
+
+        Money price = new("USD", 49.95m);
+        Money total = price.Add(new Money("USD", 5m));
+        Money rounded = total.Round(2, MidpointRounding.ToEven);
+
+        PostalAddress address = new()
+        {
+            CountryCode = "LB",
+            Locality = "Beirut",
+            Line1 = "12 Garden Street",
+            Location = new GeoCoordinate(33.8938, 35.5018)
+        };
+
+        DateTimeOffset start = DateTimeOffset.Parse("2026-09-25T10:00:00Z");
+        DateTimeRange booking = new(start, start.AddHours(1));
+        bool includesEnd = booking.Contains(booking.End); // false
+
+        // Optional compatibility with existing CloudGeography:
+        AngryMonkey.Cloud.Geography.Money legacy = price.ToGeography();
+        Money? restored = legacy.ToCommon(); // legacy empty money becomes null
+        """;
+    private string ThemeExample => $$"""
+        using AngryMonkey.CloudCommon.Theming;
+        using AngryMonkey.CloudCommon.Theming.Blazor;
+
+        ThemeDefinition theme = CloudThemes.Color("{{_theme.Colors.Primary}}", design =>
+        {
+            design.Visuals.ControlRadius = "{{_theme.Visuals.ControlRadius}}";
+            design.Typography.Family = {{JsonSerializer.Serialize(_theme.Typography.Family)}};
+            design.Element(ThemeElements.Button).Normal.Css = {{JsonSerializer.Serialize(_theme.Elements.GetValueOrDefault(ThemeElements.Button)?.Normal.Css ?? "")}};
+            {{(_theme.Colors.Success is not null ? "design.Colors.Success = \"#16734b\"; design.Colors.Warning = \"#a65f00\"; design.Colors.Danger = \"#b42332\";" : "")}}
+            {{(_theme.Animations.ContainsKey("pulse") ? "design.Animations[\"pulse\"] = new(); design.Element(ThemeElements.Button).Normal.Animation = \"pulse\";" : "")}}
+        });
+
+        <CloudThemeScope Theme="theme" Mode="ThemeModes.{{_mode}}">
+            <button data-cloud-element="button">Continue</button>
+        </CloudThemeScope>
+
+        // Outside Blazor:
+        string css = ThemeCss.Export(theme, ThemeModes.{{_mode}});
+        // Load the exported stylesheet and use:
+        <div class="cloud-theme">
+            <button data-cloud-element="button">Continue</button>
+        </div>
+
+        // Your own LESS can consume the public contract:
+        .external-card {
+            color: var(--amc-color-text);
+            background: var(--amc-color-surface);
+        }
+        """;
+    private void PrimaryAction() => _notice = "Primary action activated.";
+    private void SecondaryAction() => _notice = "Secondary action activated.";
+    private void SignInAction() => _notice = "Preview only: no sign-in request was sent.";
+    private void PaymentAction() => _notice = "Preview only: no payment was created.";
+    private void SaveAction() => _notice = "Preview changes saved for this interaction.";
+    private void SelectPage(string page) { _page = page; _tab = "View"; }
+    private void PresetChanged(ChangeEventArgs args)
+    {
+        _preset = args.Value?.ToString() ?? "Grayscale";
+        _primary = _preset switch { "Violet" => "#6750a4", "Ocean" => "#007e87", "Amber" => "#c77814", _ => "#525252" };
+        Apply();
+    }
+    private void ColorChanged(ChangeEventArgs args) { _primary = args.Value?.ToString() ?? "#525252"; Apply(); }
+    private void ModeChanged(ChangeEventArgs args) { _mode = Enum.Parse<ThemeModes>(args.Value!.ToString()!); Apply(); }
+    private void RadiusChanged(ChangeEventArgs args) { _radius = args.Value!.ToString()!; Apply(); }
+    private void FontChanged(ChangeEventArgs args) { _font = args.Value!.ToString()!; Apply(); }
+    private void StatusChanged(ChangeEventArgs args) { _statusColors = (bool)args.Value!; Apply(); }
+    private void AnimationChanged(ChangeEventArgs args) { _animate = (bool)args.Value!; Apply(); }
+    private void Apply()
+    {
+        try
+        {
+            ThemeDefinition next = CloudThemes.Color(_primary, theme =>
+            {
+                theme.Visuals.ControlRadius = _radius;
+                theme.Typography.Family = _font;
+                if (_statusColors) { theme.Colors.Success = "#16734b"; theme.Colors.Warning = "#a65f00"; theme.Colors.Danger = "#b42332"; }
+                theme.Element(ThemeElements.Button).Normal.Css = _css;
+                if (_animate) { theme.Animations["pulse"] = new(); theme.Element(ThemeElements.Button).Normal.Animation = "pulse"; }
+            });
+            ResolvedTheme resolved = ThemeResolver.Resolve(next, _mode);
+            _theme = next; _resolved = resolved; _error = null;
+        }
+        catch (ArgumentException exception) { _error = exception.Message; }
+    }
+    private void Reset()
+    {
+        _preset = "Grayscale"; _primary = "#525252"; _radius = ".5rem"; _font = "Inter, 'Segoe UI', system-ui, sans-serif"; _mode = ThemeModes.Light;
+        _css = ""; _statusColors = false; _animate = false; Apply();
+    }
+}
+

@@ -1,0 +1,23 @@
+@using AngryMonkey.CloudComponents.DataGrid.Components
+@using AngryMonkey.CloudComponents.DataGrid.Models
+<CloudDataGrid Columns="_columns" DataProvider="Load" Header="_header" RowsPerPage="5" />
+@code {
+    private readonly List<CloudDataGridColumn> _columns =
+    [
+        new() { Key = "name", Label = "Project", Sortable = false, Width = 220 },
+        new() { Key = "status", Label = "Integration", Sortable = false, Width = 240 }
+    ];
+    private readonly CloudDataGridHeaderOptions _header = new() { Label = "Shared foundation", AllowSearch = false, AllowRefresh = true, AllowExport = false };
+    private Task<CloudDataGridDataResult?> Load(CloudDataGridDataRequest request) => Task.FromResult<CloudDataGridDataResult?>(new()
+    {
+        Page = 1, PageSize = 5, Total = 4,
+        Rows =
+        [
+            new() { Id = Guid.Parse("00000000-0000-0000-0000-000000000001"), Cells = ["CDM", "Shared theme"] },
+            new() { Id = Guid.Parse("00000000-0000-0000-0000-000000000002"), Cells = ["CloudLogin", "Shared theme"] },
+            new() { Id = Guid.Parse("00000000-0000-0000-0000-000000000003"), Cells = ["CloudCommerce", "Shared theme"] },
+            new() { Id = Guid.Parse("00000000-0000-0000-0000-000000000004"), Cells = ["CloudComponents", "Live grid"] }
+        ]
+    });
+}
+

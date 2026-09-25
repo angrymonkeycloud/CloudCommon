@@ -1,0 +1,17 @@
+@using AngryMonkey.CloudLogin.Components.Login
+@using AngryMonkey.CloudCommerce.Components.Components
+@using global::CDM.Components.Shared
+@using AngryMonkey.Cloud.CDM.Models
+<div class="recipe-grid">
+  <section data-cloud-element="card" class="live-login"><span class="preview-kicker">CLOUDLOGIN</span><h3>Account input</h3><p>Real MainInput component.</p><MainInput Label="Email address" AllowEmailInput="true" Placeholder="you@example.com" @bind-Value="_email" /><p class="live-value">@_email</p></section>
+  <section data-cloud-element="card" class="live-commerce" style="@(_commerceOverride ? "--cloudcommerce-secondary-button-normal-background:#00695c;--cloudcommerce-secondary-button-normal-color:#ffffff;" : null)"><span class="preview-kicker">CLOUDCOMMERCE</span><h3>Promotion code</h3><p>Real CouponInput component.</p><CouponInput OnApply="Applied" /><label class="check-label"><input type="checkbox" @bind="_commerceOverride" /> Commerce-only override</label><p role="status">@_couponNotice</p></section>
+  <section data-cloud-element="card" class="live-cdm"><span class="preview-kicker">CDM</span><h3>Project status</h3><p>Real OptionButtons component.</p><OptionButtons Options="_options" SelectedKey="@_selected" OnSelect="Selected" /><p role="status">Selected: @_selected</p></section>
+</div>
+@code {
+  private string? _email;
+  private string _selected = "active", _couponNotice = "";
+  private bool _commerceOverride;
+  private readonly List<OptionModel> _options = [new() { Key="active", Value="Active" }, new() { Key="draft", Value="Draft" }, new() { Key="archived", Value="Archived", IsDisabled=true }];
+  private void Applied(string code) => _couponNotice = $"Promotion {code} applied in this demo.";
+  private void Selected(string key) => _selected=key;
+}
