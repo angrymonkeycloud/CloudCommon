@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<PackageId>AngryMonkey.CloudCommon.Theming.Blazor</PackageId>
 		<Description>Scoped Blazor integration for CloudCommon themes.</Description>
-		<Version>1.0.2</Version>
+		<Version>1.0.3</Version>
 		<Authors>Angry Monkey</Authors>
 		<Company>Angry Monkey</Company>
 		<AssemblyVersion>$(PackageVersion)</AssemblyVersion>
@@ -10,7 +10,7 @@
 		<PackageIcon>amc-logo.png</PackageIcon>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.12" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.14" />
 		<ProjectReference Include="../CloudCommon.Theming/CloudCommon.Theming.csproj" />
 	</ItemGroup>
 	<ItemGroup>
