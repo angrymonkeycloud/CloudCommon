@@ -16,7 +16,7 @@ Packages have not been published. Reference the projects locally or pack them in
 
 ## Run the developer workshop
 
-Requires .NET 10 and Node.js, with CloudComponents, CloudLogin, CloudCommerce and CloudBlazor alongside CloudCommon, and CDM alongside their parent angrymonkeycloud folder. From this folder:
+Requires .NET 11 and Node.js, with CloudComponents, CloudLogin, CloudCommerce and CloudBlazor alongside CloudCommon, and CDM alongside their parent angrymonkeycloud folder. From this folder:
 
     npm ci
     npm run build:related

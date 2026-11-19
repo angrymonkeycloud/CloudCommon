@@ -10,7 +10,7 @@
 		<PackageIcon>amc-logo.png</PackageIcon>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.14" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="11.0.0" />
 		<ProjectReference Include="../CloudCommon.Theming/CloudCommon.Theming.csproj" />
 	</ItemGroup>
 	<ItemGroup>

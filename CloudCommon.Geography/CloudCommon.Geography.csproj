@@ -11,7 +11,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../CloudCommon.Models/CloudCommon.Models.csproj" />
-    <PackageReference Include="AngryMonkey.CloudGeography" Version="2.8.0" />
+    <PackageReference Include="AngryMonkey.CloudGeography" Version="2.8.2" />
   </ItemGroup>
   <ItemGroup>
     <None Update="amc-logo.png">
